@@ -44,6 +44,7 @@ const message = (e) => {
 };
 
 const calculateFibonacci = (n) => {
+  console.log("[Worker] Calculating Fibonacci: " + n);
   if (typeof n != "number") {
     n = 100;
   }

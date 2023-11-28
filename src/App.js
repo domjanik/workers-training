@@ -8,7 +8,10 @@ function App() {
   };
 
   const calculateFibonacci = (n) => {
-    if (n <= 1) return n;
+    console.log("[App] Calculating Fibonacci: " + n);
+    if (n === 0) return 0;
+    if (n === 1) return 1;
+
     return calculateFibonacci(n - 1) + calculateFibonacci(n - 2);
   };
 
@@ -46,7 +49,7 @@ function App() {
     <div className="container">
       <button onClick={() => msgWorker("startCounting")}>Start Counting</button>
       <button onClick={() => msgWorker("message")}>Message Worker</button>
-      <button onClick={() => calculateFibonacci(100)}>
+      <button onClick={() => calculateFibonacci(5)}>
         Calculate Fibonacci (Without Worker)
       </button>
       <button onClick={() => msgWorker("calculateFibonacci")}>

@@ -43,7 +43,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="container">
       <button onClick={() => msgWorker("startCounting")}>Start Counting</button>
       <button onClick={() => msgWorker("message")}>Message Worker</button>
       <button onClick={() => calculateFibonacci(100)}>
@@ -53,7 +53,10 @@ function App() {
         Calculate Fibonacci (Worker)
       </button>
       <button onClick={() => msgWorker("stopCounting")}>Stop Counting</button>
-      <button onClick={() => console.log("Clicked!")}>Console log</button>
+      <div className="ui-section">
+        <button onClick={() => console.log("Clicked!")}>Console log</button>
+        <div className="hover-me">Hover me!</div>
+      </div>
     </div>
   );
 }

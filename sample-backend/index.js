@@ -1,18 +1,20 @@
 const express = require("express");
 const cors = require("cors")({ origin: true });
+const bodyParser = require("body-parser");
+
 const app = express();
 const port = 1234;
 
-app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors);
 
 app.get("/__track", (req, res) => {
-  console.log("Received request: ", JSON.stringify(req.query));
+  console.log("[GET] Received request: ", JSON.stringify(req.query));
   res.send("Received!");
 });
 
-app.post("/__track", (req, res) => {
-  console.log("Received request: ", JSON.stringify(req.body));
+app.post("/__track/batch", (req, res) => {
+  console.log("[POST] Received request: ", JSON.stringify(req.body));
   res.send("Received!");
 });
 

@@ -2,9 +2,14 @@ import { useEffect, useMemo } from "react";
 import "./App.css";
 
 function App() {
-  let myWorker;
+  let myWorker, myServiceWorker;
   const runWorker = () => {
     myWorker = new Worker("./worker.js");
+  };
+
+  const calculateFibonacci = (n) => {
+    if (n <= 1) return n;
+    return calculateFibonacci(n - 1) + calculateFibonacci(n - 2);
   };
 
   const msgWorker = (msg) => {
@@ -21,7 +26,7 @@ function App() {
   const serviceWorker = async () => {
     if ("serviceWorker" in navigator) {
       try {
-        await navigator.serviceWorker.register("./sw.js");
+        myServiceWorker = await navigator.serviceWorker.register("./sw.js");
         console.log("Service Worker Registered");
       } catch (error) {
         console.log("Service Worker Registration Failed");
@@ -41,8 +46,14 @@ function App() {
     <div className="App">
       <button onClick={() => msgWorker("startCounting")}>Start Counting</button>
       <button onClick={() => msgWorker("message")}>Message Worker</button>
-      <button onClick={() => msgWorker("loadLoader")}>Load Loader</button>
+      <button onClick={() => calculateFibonacci(100)}>
+        Calculate Fibonacci (Without Worker)
+      </button>
+      <button onClick={() => msgWorker("calculateFibonacci")}>
+        Calculate Fibonacci (Worker)
+      </button>
       <button onClick={() => msgWorker("stopCounting")}>Stop Counting</button>
+      <button onClick={() => console.log("Clicked!")}>Console log</button>
     </div>
   );
 }

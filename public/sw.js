@@ -22,18 +22,25 @@ const putInCache = async (request) => {
   cachedRequests.push(request);
 };
 
-const sentCachedRequests = async () => {
+const sentCachedRequests = async (unregister) => {
   const batch = [];
-  cachedRequests.forEach((request) => {
-    batch.push(fetch(request));
-  });
+  if (!cachedRequests.length) {
+    cachedRequests.forEach((request) => {
+      batch.push(request.url);
+    });
 
-  fetch("http://localhost:1234/__track/batch", {
-    method: "POST",
-    body: JSON.stringify(batch),
-    keepalive: true,
-  });
-  cachecRequests = [];
+    fetch("http://localhost:1234/__track/batch", {
+      method: "POST",
+      body: JSON.stringify({ requests: batch }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    cachedRequests = [];
+  }
+  if (unregister) {
+    self.registration.unregister();
+  }
 };
 
 const enableNavigationPreload = async () => {
@@ -42,11 +49,15 @@ const enableNavigationPreload = async () => {
   }
 };
 
+self.addEventListener("beforeunload", (event) => {
+  sentCachedRequests(true);
+});
+
 self.addEventListener("activate", (event) => {
   event.waitUntil(enableNavigationPreload());
 });
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(cacheAnalyticsEvents(event));
-  debounce(sentCachedRequests, 10000);
+  debounce(sentCachedRequests, 10_000);
 });

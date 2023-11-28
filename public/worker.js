@@ -13,7 +13,7 @@ const messages = {
   startCounting: "startCounting",
   stopCounting: "stopCounting",
   message: "message",
-  loadLoader: "loadLoader",
+  calculateFibonacci: "calculateFibonacci",
 };
 
 let countingStarted = false;
@@ -43,13 +43,19 @@ const message = (e) => {
   );
 };
 
-const loadLoader = () => {};
+const calculateFibonacci = (n) => {
+  if (typeof n != "number") {
+    n = 100;
+  }
+  if (n <= 1) return n;
+  return calculateFibonacci(n - 1) + calculateFibonacci(n - 2);
+};
 
 const messageCallbacks = {
   [messages.startCounting]: startCounting,
   [messages.stopCounting]: stopCounting,
   [messages.message]: message,
-  [messages.loadLoader]: loadLoader,
+  [messages.calculateFibonacci]: calculateFibonacci,
 };
 
 onmessage = function (e) {

@@ -43,20 +43,33 @@ const message = (e) => {
   );
 };
 
-const calculateFibonacci = (n) => {
-  console.log("[Worker] Calculating Fibonacci: " + n);
-  if (typeof n != "number") {
-    n = 100;
+const startCalculateFibonacci = () => {
+  calculateFibonacci(100);
+};
+
+const calculateFibonacci = (nTerms) => {
+  function fibonacci(num) {
+    if (num < 2) {
+      return num;
+    } else {
+      return fibonacci(num - 1) + fibonacci(num - 2);
+    }
   }
-  if (n <= 1) return n;
-  return calculateFibonacci(n - 1) + calculateFibonacci(n - 2);
+
+  if (nTerms <= 0) {
+    console.log("Enter a positive integer.");
+  } else {
+    for (let i = 0; i < nTerms; i++) {
+      console.log(fibonacci(i));
+    }
+  }
 };
 
 const messageCallbacks = {
   [messages.startCounting]: startCounting,
   [messages.stopCounting]: stopCounting,
   [messages.message]: message,
-  [messages.calculateFibonacci]: calculateFibonacci,
+  [messages.calculateFibonacci]: startCalculateFibonacci,
 };
 
 onmessage = function (e) {

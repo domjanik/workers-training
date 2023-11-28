@@ -7,12 +7,22 @@ function App() {
     myWorker = new Worker("./worker.js");
   };
 
-  const calculateFibonacci = (n) => {
-    console.log("[App] Calculating Fibonacci: " + n);
-    if (n === 0) return 0;
-    if (n === 1) return 1;
+  const calculateFibonacci = (nTerms) => {
+    function fibonacci(num) {
+      if (num < 2) {
+        return num;
+      } else {
+        return fibonacci(num - 1) + fibonacci(num - 2);
+      }
+    }
 
-    return calculateFibonacci(n - 1) + calculateFibonacci(n - 2);
+    if (nTerms <= 0) {
+      console.log("Enter a positive integer.");
+    } else {
+      for (let i = 0; i < nTerms; i++) {
+        console.log(fibonacci(i));
+      }
+    }
   };
 
   const msgWorker = (msg) => {
@@ -40,6 +50,7 @@ function App() {
   useEffect(() => {
     runWorker();
     serviceWorker();
+
     return () => {
       myWorker.terminate();
     };
@@ -49,7 +60,7 @@ function App() {
     <div className="container">
       <button onClick={() => msgWorker("startCounting")}>Start Counting</button>
       <button onClick={() => msgWorker("message")}>Message Worker</button>
-      <button onClick={() => calculateFibonacci(5)}>
+      <button onClick={() => calculateFibonacci(100)}>
         Calculate Fibonacci (Without Worker)
       </button>
       <button onClick={() => msgWorker("calculateFibonacci")}>

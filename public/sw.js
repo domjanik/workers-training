@@ -9,6 +9,7 @@ const debounce = (func, wait) => {
 };
 
 let cachedRequests = [];
+
 const cacheAnalyticsEvents = async (event) => {
   const url = new URL(event.request.url);
   if (url.pathname.includes("__track")) {
@@ -21,10 +22,10 @@ const cacheAnalyticsEvents = async (event) => {
 const putInCache = async (request) => {
   cachedRequests.push(request);
 };
-
-const sentCachedRequests = async (unregister) => {
+let unregister = false;
+const sentCachedRequests = async () => {
   const batch = [];
-  if (!cachedRequests.length) {
+  if (cachedRequests.length) {
     cachedRequests.forEach((request) => {
       batch.push(request.url);
     });
@@ -50,7 +51,7 @@ const enableNavigationPreload = async () => {
 };
 
 self.addEventListener("beforeunload", (event) => {
-  sentCachedRequests(true);
+  unregister = true;
 });
 
 self.addEventListener("activate", (event) => {
@@ -59,5 +60,5 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(cacheAnalyticsEvents(event));
-  debounce(sentCachedRequests, 10_000);
+  debounce(sentCachedRequests, 5_000);
 });
